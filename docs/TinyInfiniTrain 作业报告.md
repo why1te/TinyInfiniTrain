@@ -225,6 +225,9 @@ template <typename FuncT> void Register(const KeyT &key, FuncT &&kernel) {
 
 
 #### 遇到问题
+1. key_to_kernel_map_.emplace(key, KernelFunction(std::forward<FuncT>(kernel)));
+2. 实现自动注册宏时不能使用infini_train::Dispatcher.Register() 
+3. 不能直接创建 Dispather对象
 
 
 
