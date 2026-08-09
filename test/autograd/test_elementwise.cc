@@ -1,21 +1,20 @@
-#include<iostream>
-#include<vector>
+#include <iostream>
+#include <vector>
 
-#include "gtest/gtest.h"
-#include "infini_train/include/tensor.h"
-#include "infini_train/include/device.h"
 #include "infini_train/include/autograd/elementwise.h"
+#include "infini_train/include/device.h"
+#include "infini_train/include/tensor.h"
+#include "gtest/gtest.h"
 
 using namespace infini_train;
 
 TEST(ElementwiseTest, NegForward) {
-    auto input = std::make_shared<Tensor>(
-        std::vector<int64_t>{3},  // dims
-        DataType::kFLOAT32,      // dtype
-        Device(DeviceType::kCPU, 0) // device
+    auto input = std::make_shared<Tensor>(std::vector<int64_t>{3},    // dims
+                                          DataType::kFLOAT32,         // dtype
+                                          Device(DeviceType::kCPU, 0) // device
     );
-    
-    float* data = static_cast<float*>(input->DataPtr());
+
+    float *data = static_cast<float *>(input->DataPtr());
     data[0] = 1.0f;
     data[1] = -2.0f;
     data[2] = 0.0f;
@@ -26,21 +25,18 @@ TEST(ElementwiseTest, NegForward) {
 
     // 预期输出：[-1.0, 2.0, 0.0]
     std::vector<float> expected = {-1.0f, 2.0f, 0.0f};
-    const float* result_data = static_cast<const float*>(outputs[0]->DataPtr());
+    const float *result_data = static_cast<const float *>(outputs[0]->DataPtr());
 
-    for (size_t i = 0; i < expected.size(); ++i) {
-        EXPECT_FLOAT_EQ(result_data[i], expected[i]);
-    }
+    for (size_t i = 0; i < expected.size(); ++i) { EXPECT_FLOAT_EQ(result_data[i], expected[i]); }
 }
 
 TEST(ElementwiseTest, NegBackward) {
-    auto grad_output = std::make_shared<Tensor>(
-        std::vector<int64_t>{3},  // dims
-        DataType::kFLOAT32,       // dtype
-        Device(DeviceType::kCPU, 0) // device
+    auto grad_output = std::make_shared<Tensor>(std::vector<int64_t>{3},    // dims
+                                                DataType::kFLOAT32,         // dtype
+                                                Device(DeviceType::kCPU, 0) // device
     );
 
-    float* grad_data = static_cast<float*>(grad_output->DataPtr());
+    float *grad_data = static_cast<float *>(grad_output->DataPtr());
     grad_data[0] = 1.0f;
     grad_data[1] = 1.0f;
     grad_data[2] = 1.0f;
@@ -51,9 +47,7 @@ TEST(ElementwiseTest, NegBackward) {
 
     // 预期梯度：[-1.0, -1.0, -1.0]
     std::vector<float> expected = {-1.0f, -1.0f, -1.0f};
-    const float* result_data = static_cast<const float*>(grad_inputs[0]->DataPtr());
-    
-    for (size_t i = 0; i < expected.size(); ++i) {
-        EXPECT_FLOAT_EQ(result_data[i], expected[i]);
-    }
+    const float *result_data = static_cast<const float *>(grad_inputs[0]->DataPtr());
+
+    for (size_t i = 0; i < expected.size(); ++i) { EXPECT_FLOAT_EQ(result_data[i], expected[i]); }
 }

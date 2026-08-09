@@ -35,8 +35,11 @@ std::vector<std::shared_ptr<Tensor>> Neg::Backward(const std::vector<std::shared
 
 
 #### 遇到问题
-
-
+1. 
+```c++
+const auto &input = input_tensors[0];
+```
+如上，使用auto自动推断变量类型，为什么还要使用`&`?
 
 ### 作业二：实现矩阵乘法
 
@@ -221,6 +224,13 @@ template <typename FuncT> void Register(const KeyT &key, FuncT &&kernel) {
 ```
 
 #### 解决思路
+###### Call()
+1. 接收传递的函数返回类型和参数列表
+2. 根据函数返回类型将先前存储的 void* 函数指针恢复
+3. 调用算子并传递参数列表
+
+###### Register()
+1. 根据`./infini_train/src/kernel/`内的实现，算子注册通过`REGISTER_KERNEL`宏实现。所以控制流应当是 `REGISTER_KERNEL → Register()`
 
 
 

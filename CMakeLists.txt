@@ -1,5 +1,5 @@
-option(USE_CUDA "Support NVIDIA CUDA" OFF)
-option(BUILD_TEST "Build tests" OFF)
+option(USE_CUDA "Support NVIDIA CUDA" ON)
+option(BUILD_TEST "Build tests" ON)
 option(BUILD_TESTING "third party tests" OFF)
 
 cmake_minimum_required(VERSION 3.28)

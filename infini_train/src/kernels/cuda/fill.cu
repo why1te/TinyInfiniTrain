@@ -9,14 +9,18 @@
 
 namespace infini_train::kernels::cuda {
 void Fill(std::shared_ptr<Tensor> tensor, void *value_ptr) {
-    // FIXME(zbl): support other data types
-    thrust::device_ptr<float> dev_ptr(reinterpret_cast<float *>(tensor->DataPtr()));
-    thrust::fill(thrust::cuda::par.on(0), dev_ptr, dev_ptr + tensor->NumElements(), *(static_cast<float *>(value_ptr)));
+  // FIXME(zbl): support other data types
+  thrust::device_ptr<float> dev_ptr(
+      reinterpret_cast<float *>(tensor->DataPtr()));
+  thrust::fill(thrust::cuda::par.on(0), dev_ptr,
+               dev_ptr + tensor->NumElements(),
+               *(static_cast<float *>(value_ptr)));
 }
 } // namespace infini_train::kernels::cuda
 
-#define REGISTER_CUDA_FILL_KERNEL(kernel_name)                                                                         \
-    REGISTER_KERNEL(infini_train::DeviceType::kCUDA, kernel_name, infini_train::kernels::cuda::kernel_name)
+#define REGISTER_CUDA_FILL_KERNEL(kernel_name)                                 \
+  REGISTER_KERNEL(infini_train::DeviceType::kCUDA, kernel_name,                \
+                  infini_train::kernels::cuda::kernel_name)
 
 REGISTER_CUDA_FILL_KERNEL(Fill)
 
